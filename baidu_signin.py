@@ -1,37 +1,76 @@
-import re
-import time
-import json
-import random
-import requests
+# -*- coding: utf-8 -*-
+import re, sys, requests
+from bs4 import BeautifulSoup
 
-# 1) 把你在已登录贴吧页面抓到的 Cookie 放到这里（至少包含 BDUSS；完整复制更稳）
-BDUSS = "XUyR0VUZ0F3bzB-RFE4MTVnTlQxck5lNEF3ZFlubVhzbG9QcXBCTnRNTEZPalJuSVFBQUFBJCQAAAAAAAAAAAEAAABsQICS1ty93MLXcm9ja3kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMWtDGfFrQxnT"   # ← 替换
-STOKEN= "fc3434c096cb65385b1916f9a1136c4cdaa734b1b57a34ed9b09ada4b59a0e61"
+BASE = "https://bbs.steamtools.net"
+COOKIE_STR = ""  # 执行登录后，不需要手动填 Cookie；会由 Session 自动管理
+EMOT_ID = "1"
+TODAY_SAY = ""
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+def get_formhash_page(s):
+    url = f"{BASE}/plugin.php?id=dc_signin&mobile=no"
+    r = s.get(url, timeout=20)
+    m = re.search(r'name="formhash"\s+value="([0-9A-Za-z]+)"', r.text) or \
+        re.search(r"FORMHASH\s*=\s*'([0-9A-Za-z]+)'", r.text)
+    if not m:
+        print("未找到 formhash（签到页面获取失败，可能未登录）")
+        print(r.text[:500])
+        sys.exit(1)
+    return m.group(1)
 
-s = requests.Session()
-s.headers.update({"User-Agent": UA, "Referer": "https://tieba.baidu.com/"})
+def login(s):
+    login_page = s.get(f"{BASE}/member.php?mod=logging&action=login", timeout=20).text
+    m = re.search(r'name="formhash"\s+value="([0-9A-Za-z]+)"', login_page)
+    if not m:
+        print("未能解析 login 表单 page formhash，请手工检查页面")
+        sys.exit(1)
+    formhash = m.group(1)
+    print("登录页面 formhash：", formhash)
 
-# 用 cookies 字典方式，避免手写 Cookie 头的拼接问题
-if BDUSS: s.cookies.set("BDUSS", BDUSS, domain=".baidu.com")
+    payload = {
+        "formhash": formhash,
+        "username": USERNAME,
+        "password": PASSWORD,
+        "questionid": 0,
+        "answer": "",
+        "referer": BASE
+    }
+    headers = {"User-Agent": "Mozilla/5.0"}
+    r = s.post(f"{BASE}/member.php?mod=logging&action=login&loginsubmit=yes&mobile=no",
+               data=payload, headers=headers, timeout=20)
+    if "欢迎您回来" not in r.text:
+        print("登录失败，页面返回：")
+        print(r.text[:500])
+        sys.exit(1)
+    print("登录成功!")
+
+def do_sign(s):
+    formhash = get_formhash_page(s)
+    print("签到 formhash:", formhash)
+
+    payload = {
+        "formhash": formhash,
+        "signsubmit": "yes",
+        "emotid": EMOT_ID,
+        "todaysay": TODAY_SAY,
+    }
+    headers = {
+        "X-Requested-With": "XMLHttpRequest",
+        "Referer": f"{BASE}/plugin.php?id=dc_signin",
+        "Origin": BASE,
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "User-Agent": "Mozilla/5.0",
+    }
+    r = s.post(f"{BASE}/plugin.php?id=dc_signin:sign&inajax=1",
+               data=payload, headers=headers, timeout=20)
+
+    print("签到成功!")
 
 
-def get_tbs():
-    r = s.get("https://tieba.baidu.com/dc/common/tbs", timeout=10)
-    j = r.json()
-    return j
-
-def onekey_sign(tbs):
-    data = {"ie": "utf-8", "tbs": tbs}
-    r = s.post("https://tieba.baidu.com/tbmall/onekeySignin1", data=data, timeout=15)
-    return r.json()
+def main():
+    s = requests.Session()
+    login(s)
+    do_sign(s)
 
 if __name__ == "__main__":
-    j = get_tbs()
-    print("tbs接口返回：", j)
-    if j.get("is_login") != 1:
-        print("未登录/COOKIE失效，请重新从 tieba.baidu.com 复制 BDUSS/BDUSS_BFESS/STOKEN。")
-        exit(1)
-    resp = onekey_sign(j["tbs"])
-    print("一键签到返回：", json.dumps(resp, ensure_ascii=False))
+    main()
