@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 import re, sys, requests
 from bs4 import BeautifulSoup
+import os
+
+USERNAME = os.getenv("DC_USER")   # 从环境变量取
+PASSWORD = os.getenv("DC_PASS")
+
+if not USERNAME or not PASSWORD:
+    raise RuntimeError("账号或密码未配置，请在 GitHub Secrets 里设置 DC_USER / DC_PASS")
+
+print("准备登录账号:", USERNAME)
 
 BASE = "https://bbs.steamtools.net"
 COOKIE_STR = ""  # 执行登录后，不需要手动填 Cookie；会由 Session 自动管理
@@ -74,3 +83,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
