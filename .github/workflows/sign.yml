@@ -1,0 +1,30 @@
+name: Daily Discuz Sign
+
+on:
+  schedule:
+    - cron: "10 1 * * *"   # 每天 01:10 UTC = 北京时间 09:10
+  workflow_dispatch:       # 支持手动运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || true
+
+      - name: Run script
+        env:
+          DC_USER: ${{ secrets.DC_USER }}
+          DC_PASS: ${{ secrets.DC_PASS }}
+        run: |
+          python sign.py
