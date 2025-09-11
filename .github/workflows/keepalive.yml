@@ -1,0 +1,12 @@
+name: keep-hf-space-awake
+on:
+  schedule:
+    - cron: "*/30 * * * *"  # 每30分钟执行一次
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl Space
+        run: |
+          curl -fsS https://huggingface.co/spaces/rockydavis/ain8n > /dev/null
