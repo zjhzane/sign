@@ -4,8 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 
 # 登录信息
-username = 'xxxxxxx'  # 输入你的用户名
-password = 'xxxxxxx'  # 输入你的密码
+username = 'zjhzane'  # 输入你的用户名
+password = '87890022'  # 输入你的密码
 
 # 创建一个会话对象，保持会话状态
 session = requests.Session()
@@ -74,3 +74,4 @@ if '欢迎您回来' in login_response.text:
         print("签到失败，请稍后再试。")
 else:
     print("登录失败，请检查用户名和密码。")
+
