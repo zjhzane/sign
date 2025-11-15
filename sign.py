@@ -41,7 +41,7 @@ if '欢迎您回来' in login_response.text:
     print("登陆成功！")
 
     # 登录后访问签到页面
-    signin_url = 'https://bbs.steamtools.net/plugin.php?id=dc_signin:sign'
+    signin_url = 'https://bbs.steamtools.net/plugin.php?id=dc_signin:sign&infloat=yes&handlekey=sign&inajax=1&ajaxtarget=fwin_content_sign'
 
     # 获取签到页面以提取 formhash 和其他参数
     signin_page = session.get(signin_url)
@@ -74,4 +74,5 @@ if '欢迎您回来' in login_response.text:
         print("签到失败，请稍后再试。")
 else:
     print("登录失败，请检查用户名和密码。")
+
 
