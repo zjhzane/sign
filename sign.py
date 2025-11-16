@@ -8,8 +8,9 @@ import time
 import random
 import re
 from bs4 import BeautifulSoup
-import cloudscraper
-
+# 尝试导入 cloudflare-scraper，如果没有则使用 requests
+try:
+    import cloudscraper
     HAS_CLOUDSCRAPER = True
     print("✅ 使用 cloudflare-scraper")
 except ImportError:
@@ -855,4 +856,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
 
