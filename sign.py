@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 # 尝试导入 cloudflare-scraper，如果没有则使用 requests
 try:
     import cloudscraper
+    import requests  # cloudscraper 基于 requests，确保可以访问 requests.exceptions
     HAS_CLOUDSCRAPER = True
     print("✅ 使用 cloudflare-scraper")
 except ImportError:
@@ -65,6 +66,8 @@ def get_session():
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
         })
+    # 限制最大重定向次数，避免重定向循环
+    session.max_redirects = 10
     return session
 
 
@@ -73,11 +76,44 @@ def login_with_requests(session, username, password, max_retries=3):
     for attempt in range(max_retries):
         try:
             print(f"访问登录页面 (尝试 {attempt + 1}/{max_retries})...")
+            
+            # 在请求前添加延迟，避免触发速率限制
+            if attempt > 0:
+                wait_time = min(30 * (2 ** attempt), 300)  # 指数退避，最多等待5分钟
+                print(f"等待 {wait_time} 秒后重试（避免速率限制）...")
+                time.sleep(wait_time)
+            else:
+                # 首次请求也添加随机延迟
+                time.sleep(random.uniform(2, 5))
 
             # 1. 访问登录页面获取 formhash
             login_url = f"{BASE}/member.php?mod=logging&action=login"
-            response = session.get(login_url, timeout=30)
-            response.raise_for_status()
+            try:
+                response = session.get(login_url, timeout=30, allow_redirects=True)
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:
+                    # 429 错误：请求过于频繁
+                    retry_after = int(e.response.headers.get('Retry-After', 60))
+                    print(f"⚠️ 收到 429 错误，需要等待 {retry_after} 秒...")
+                    if attempt < max_retries - 1:
+                        wait_time = max(retry_after, 60)  # 至少等待60秒
+                        print(f"等待 {wait_time} 秒后重试...")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise
+                else:
+                    raise
+            except requests.exceptions.TooManyRedirects:
+                print("⚠️ 重定向次数过多，可能是重定向循环")
+                if attempt < max_retries - 1:
+                    wait_time = 30 * (attempt + 1)
+                    print(f"等待 {wait_time} 秒后重试...")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    raise
 
             # 解析 formhash
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -100,6 +136,9 @@ def login_with_requests(session, username, password, max_retries=3):
 
             # 2. 提交登录表单
             print("提交登录表单...")
+            # 在提交前添加延迟
+            time.sleep(random.uniform(1, 3))
+            
             login_action_url = f"{BASE}/member.php?mod=logging&action=login&loginsubmit=yes&inajax=1"
 
             login_data = {
@@ -113,8 +152,22 @@ def login_with_requests(session, username, password, max_retries=3):
                 'loginsubmit': 'true'
             }
 
-            response = session.post(login_action_url, data=login_data, timeout=30, allow_redirects=True)
-            response.raise_for_status()
+            try:
+                response = session.post(login_action_url, data=login_data, timeout=30, allow_redirects=True)
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:
+                    retry_after = int(e.response.headers.get('Retry-After', 60))
+                    print(f"⚠️ 提交登录时收到 429 错误，需要等待 {retry_after} 秒...")
+                    if attempt < max_retries - 1:
+                        wait_time = max(retry_after, 60)
+                        print(f"等待 {wait_time} 秒后重试...")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise
+                else:
+                    raise
 
             # 3. 检查登录是否成功
             if "欢迎您回来" in response.text or "登录成功" in response.text or "succeed" in response.text.lower():
@@ -137,10 +190,40 @@ def login_with_requests(session, username, password, max_retries=3):
                     continue
                 return False
 
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                retry_after = int(e.response.headers.get('Retry-After', 60))
+                print(f"⚠️ 收到 429 错误 (尝试 {attempt + 1}): {e}")
+                if attempt < max_retries - 1:
+                    wait_time = max(retry_after, 60)
+                    print(f"等待 {wait_time} 秒后重试...")
+                    time.sleep(wait_time)
+                    continue
+            print(f"⚠️ HTTP 错误 (尝试 {attempt + 1}): {e}")
+            if attempt < max_retries - 1:
+                wait_time = min(30 * (2 ** attempt), 300)
+                print(f"等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
+                continue
+            import traceback
+            traceback.print_exc()
+            return False
+        except requests.exceptions.TooManyRedirects as e:
+            print(f"⚠️ 重定向次数过多 (尝试 {attempt + 1}): {e}")
+            if attempt < max_retries - 1:
+                wait_time = 30 * (attempt + 1)
+                print(f"等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
+                continue
+            import traceback
+            traceback.print_exc()
+            return False
         except Exception as e:
             print(f"⚠️ 登录过程出错 (尝试 {attempt + 1}): {e}")
             if attempt < max_retries - 1:
-                time.sleep(3)
+                wait_time = min(30 * (2 ** attempt), 300)
+                print(f"等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
                 continue
             import traceback
             traceback.print_exc()
@@ -154,12 +237,34 @@ def sign_with_requests(session, emotid="1", today_say="", max_retries=3):
     for attempt in range(max_retries):
         try:
             print(f"访问签到页面 (尝试 {attempt + 1}/{max_retries})...")
+            
+            # 在请求前添加延迟
+            if attempt > 0:
+                wait_time = min(30 * (2 ** attempt), 300)
+                print(f"等待 {wait_time} 秒后重试（避免速率限制）...")
+                time.sleep(wait_time)
+            else:
+                time.sleep(random.uniform(2, 5))
 
             # 使用您提供的签到 URL（获取表单）
             sign_url = f"{BASE}/plugin.php?id=dc_signin:sign&infloat=yes&handlekey=sign&inajax=1&ajaxtarget=fwin_content_sign"
 
-            response = session.get(sign_url, timeout=30)
-            response.raise_for_status()
+            try:
+                response = session.get(sign_url, timeout=30)
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:
+                    retry_after = int(e.response.headers.get('Retry-After', 60))
+                    print(f"⚠️ 收到 429 错误，需要等待 {retry_after} 秒...")
+                    if attempt < max_retries - 1:
+                        wait_time = max(retry_after, 60)
+                        print(f"等待 {wait_time} 秒后重试...")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise
+                else:
+                    raise
 
             # 解析 formhash（可能需要从 XML/CDATA 中提取）
             formhash = None
@@ -198,6 +303,9 @@ def sign_with_requests(session, emotid="1", today_say="", max_retries=3):
 
             # 提交签到表单（根据 XML 中的表单结构）
             print(f"提交签到（表情 ID: {emotid}）...")
+            # 在提交前添加延迟
+            time.sleep(random.uniform(1, 3))
+            
             # 表单 action: plugin.php?id=dc_signin:sign
             # 使用 AJAX 方式提交（inajax=1）
             sign_action_url = f"{BASE}/plugin.php?id=dc_signin:sign&inajax=1"
@@ -219,8 +327,22 @@ def sign_with_requests(session, emotid="1", today_say="", max_retries=3):
                 'Referer': f"{BASE}/./"
             }
 
-            response = session.post(sign_action_url, data=sign_data, headers=headers, timeout=30)
-            response.raise_for_status()
+            try:
+                response = session.post(sign_action_url, data=sign_data, headers=headers, timeout=30)
+                response.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:
+                    retry_after = int(e.response.headers.get('Retry-After', 60))
+                    print(f"⚠️ 提交签到时收到 429 错误，需要等待 {retry_after} 秒...")
+                    if attempt < max_retries - 1:
+                        wait_time = max(retry_after, 60)
+                        print(f"等待 {wait_time} 秒后重试...")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise
+                else:
+                    raise
 
             # 检查签到结果（可能需要检查 XML 响应）
             response_text = response.text
@@ -247,10 +369,30 @@ def sign_with_requests(session, emotid="1", today_say="", max_retries=3):
                     return True
                 return True  # 即使不确定也返回 True，可能是已签到的情况
 
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                retry_after = int(e.response.headers.get('Retry-After', 60))
+                print(f"⚠️ 收到 429 错误 (尝试 {attempt + 1}): {e}")
+                if attempt < max_retries - 1:
+                    wait_time = max(retry_after, 60)
+                    print(f"等待 {wait_time} 秒后重试...")
+                    time.sleep(wait_time)
+                    continue
+            print(f"⚠️ HTTP 错误 (尝试 {attempt + 1}): {e}")
+            if attempt < max_retries - 1:
+                wait_time = min(30 * (2 ** attempt), 300)
+                print(f"等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
+                continue
+            import traceback
+            traceback.print_exc()
+            return False
         except Exception as e:
             print(f"⚠️ 签到过程出错 (尝试 {attempt + 1}): {e}")
             if attempt < max_retries - 1:
-                time.sleep(3)
+                wait_time = min(30 * (2 ** attempt), 300)
+                print(f"等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
                 continue
             import traceback
             traceback.print_exc()
@@ -701,6 +843,8 @@ def sign_with_playwright(page, max_retries=3):
 
 def main():
     """主函数：优先使用 requests 版本，如果需要 Playwright 则设置环境变量 USE_PLAYWRIGHT=true"""
+    should_try_playwright = False
+    
     # 优先使用 requests 版本（更快更简单）
     if not USE_PLAYWRIGHT:
         try:
@@ -731,130 +875,142 @@ def main():
             print(f"❌ requests 版本执行失败: {e}")
             import traceback
             traceback.print_exc()
-            print("\n⚠️ 尝试使用 Playwright 版本...")
-            # 如果 requests 失败，可以尝试 Playwright
-            # 但这里我们直接返回错误，让用户决定
-            return 1
-
-    # 使用 Playwright 版本
-    try:
-        if not USE_PLAYWRIGHT:
-            raise RuntimeError("Playwright 模式未启用")
-
-        print("=" * 60)
-        print("🚀 使用 Playwright 版本")
-        print("=" * 60)
-
-        with sync_playwright() as p:
-            # 启动浏览器
-            # 如果 Cloudflare 挑战一直失败，可以尝试 headless=False（显示浏览器窗口）
-            # 在某些情况下，非 headless 模式更容易通过 Cloudflare 挑战
-            use_headless = os.getenv("PLAYWRIGHT_HEADLESS", "true").lower() == "true"
-            print(f"启动浏览器 (headless={use_headless})...")
-            browser = p.chromium.launch(
-                headless=use_headless,
-                args=['--no-sandbox', '--disable-setuid-sandbox']
+            
+            # 如果是 429 错误或重定向问题，尝试使用 Playwright（如果可用）
+            should_try_playwright = (
+                "429" in str(e) or 
+                "Too Many Requests" in str(e) or 
+                "redirect" in str(e).lower() or
+                "TooManyRedirects" in str(e)
             )
+            
+            if should_try_playwright and USE_PLAYWRIGHT:
+                print("\n⚠️ 检测到速率限制或重定向问题，尝试使用 Playwright 版本...")
+            else:
+                print("\n⚠️ requests 版本失败")
+                if not USE_PLAYWRIGHT:
+                    print("提示：可以设置环境变量 USE_PLAYWRIGHT=true 来使用 Playwright 版本")
+                return 1
 
-            # 创建上下文（模拟真实浏览器，增加更多指纹信息）
-            context = browser.new_context(
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                viewport={'width': 1920, 'height': 1080},
-                # 忽略 HTTPS 错误（如果需要）
-                ignore_https_errors=False,
-                # 设置语言和时区
-                locale='zh-CN',
-                timezone_id='Asia/Shanghai',
-                # 设置权限
-                permissions=['geolocation'],
-                # 设置地理位置（可选）
-                geolocation={'latitude': 39.9042, 'longitude': 116.4074},
-                # 设置屏幕信息
-                screen={'width': 1920, 'height': 1080},
-                # 设置颜色方案
-                color_scheme='light',
-                # 设置额外的 HTTP 头
-                extra_http_headers={
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'DNT': '1',
-                    'Connection': 'keep-alive',
-                    'Upgrade-Insecure-Requests': '1',
-                    'Sec-Fetch-Dest': 'document',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'none',
-                    'Sec-Fetch-User': '?1',
-                    'Cache-Control': 'max-age=0',
-                }
-            )
+    # 使用 Playwright 版本（如果启用或 requests 失败需要回退）
+    if USE_PLAYWRIGHT or should_try_playwright:
+        try:
+            if not USE_PLAYWRIGHT and not should_try_playwright:
+                raise RuntimeError("Playwright 模式未启用")
 
-            # 设置请求拦截，处理网络错误
-            def handle_route(route):
+            print("=" * 60)
+            print("🚀 使用 Playwright 版本")
+            print("=" * 60)
+
+            with sync_playwright() as p:
+                # 启动浏览器
+                # 如果 Cloudflare 挑战一直失败，可以尝试 headless=False（显示浏览器窗口）
+                # 在某些情况下，非 headless 模式更容易通过 Cloudflare 挑战
+                use_headless = os.getenv("PLAYWRIGHT_HEADLESS", "true").lower() == "true"
+                print(f"启动浏览器 (headless={use_headless})...")
+                browser = p.chromium.launch(
+                    headless=use_headless,
+                    args=['--no-sandbox', '--disable-setuid-sandbox']
+                )
+
+                # 创建上下文（模拟真实浏览器，增加更多指纹信息）
+                context = browser.new_context(
+                    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+                    viewport={'width': 1920, 'height': 1080},
+                    # 忽略 HTTPS 错误（如果需要）
+                    ignore_https_errors=False,
+                    # 设置语言和时区
+                    locale='zh-CN',
+                    timezone_id='Asia/Shanghai',
+                    # 设置权限
+                    permissions=['geolocation'],
+                    # 设置地理位置（可选）
+                    geolocation={'latitude': 39.9042, 'longitude': 116.4074},
+                    # 设置屏幕信息
+                    screen={'width': 1920, 'height': 1080},
+                    # 设置颜色方案
+                    color_scheme='light',
+                    # 设置额外的 HTTP 头
+                    extra_http_headers={
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                        'Accept-Encoding': 'gzip, deflate, br',
+                        'DNT': '1',
+                        'Connection': 'keep-alive',
+                        'Upgrade-Insecure-Requests': '1',
+                        'Sec-Fetch-Dest': 'document',
+                        'Sec-Fetch-Mode': 'navigate',
+                        'Sec-Fetch-Site': 'none',
+                        'Sec-Fetch-User': '?1',
+                        'Cache-Control': 'max-age=0',
+                    }
+                )
+
+                # 设置请求拦截，处理网络错误
+                def handle_route(route):
+                    try:
+                        route.continue_()
+                    except:
+                        pass
+
+                context.route("**/*", handle_route)
+
+                # 创建页面
+                page = context.new_page()
+
+                # 设置默认导航超时（在页面上设置，而不是在 context 上）
+                page.set_default_navigation_timeout(60000)
+                page.set_default_timeout(60000)
+
+                # 注入 JavaScript 来模拟真实浏览器环境
+                page.add_init_script("""
+                    // 覆盖 navigator.webdriver
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined
+                    });
+
+                    // 添加 Chrome 对象
+                    window.chrome = {
+                        runtime: {}
+                    };
+
+                    // 覆盖 plugins
+                    Object.defineProperty(navigator, 'plugins', {
+                        get: () => [1, 2, 3, 4, 5]
+                    });
+
+                    // 覆盖 languages
+                    Object.defineProperty(navigator, 'languages', {
+                        get: () => ['zh-CN', 'zh', 'en']
+                    });
+                """)
+
                 try:
-                    route.continue_()
-                except:
-                    pass
+                    # 登录
+                    if not login_with_playwright(page, USERNAME, PASSWORD):
+                        raise RuntimeError("登录失败")
 
-            context.route("**/*", handle_route)
+                    # 等待一下
+                    time.sleep(random.uniform(2, 4))
 
-            # 创建页面
-            page = context.new_page()
+                    # 签到
+                    if not sign_with_playwright(page):
+                        raise RuntimeError("签到失败")
 
-            # 设置默认导航超时（在页面上设置，而不是在 context 上）
-            page.set_default_navigation_timeout(60000)
-            page.set_default_timeout(60000)
+                    print("🎉 所有操作完成！")
 
-            # 注入 JavaScript 来模拟真实浏览器环境
-            page.add_init_script("""
-                // 覆盖 navigator.webdriver
-                Object.defineProperty(navigator, 'webdriver', {
-                    get: () => undefined
-                });
+                finally:
+                    browser.close()
 
-                // 添加 Chrome 对象
-                window.chrome = {
-                    runtime: {}
-                };
-
-                // 覆盖 plugins
-                Object.defineProperty(navigator, 'plugins', {
-                    get: () => [1, 2, 3, 4, 5]
-                });
-
-                // 覆盖 languages
-                Object.defineProperty(navigator, 'languages', {
-                    get: () => ['zh-CN', 'zh', 'en']
-                });
-            """)
-
-            try:
-                # 登录
-                if not login_with_playwright(page, USERNAME, PASSWORD):
-                    raise RuntimeError("登录失败")
-
-                # 等待一下
-                time.sleep(random.uniform(2, 4))
-
-                # 签到
-                if not sign_with_playwright(page):
-                    raise RuntimeError("签到失败")
-
-                print("🎉 所有操作完成！")
-
-            finally:
-                browser.close()
-
-    except Exception as e:
-        print(f"❌ 执行失败: {e}")
-        import traceback
-        traceback.print_exc()
-        return 1
+        except Exception as e:
+            print(f"❌ 执行失败: {e}")
+            import traceback
+            traceback.print_exc()
+            return 1
 
     return 0
 
 
 if __name__ == "__main__":
     exit(main())
-
 
