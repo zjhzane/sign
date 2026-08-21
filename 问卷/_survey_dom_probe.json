@@ -1,0 +1,980 @@
+[
+  {
+    "label": "welcome",
+    "url": "https://dm.njcedu.com/answer?id=17093",
+    "text": "您好！\n\n        为全面了解我校2026届毕业生的就业及人才培养供需适配情况，现面向2026届毕业生及用人单位开展调研。诚邀您积极参与，您的宝贵反馈将为学校进一步优化“招生—培养—就业”一体化联动水平提供重要参考。感谢您的支持！\n\n浙江万里学院\n\n开始填写",
+    "dom": {
+      "radios": [],
+      "checks": [],
+      "inputs": [],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-write el-button--default",
+          "role": null,
+          "text": "开始填写"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "flex flex-column justify-between",
+        "flex",
+        "p-left-image",
+        "el-image",
+        "el-image__inner",
+        "flex-1",
+        "ql-container ql-snow font",
+        "content ql-editor font",
+        "ql-align-right",
+        "flex justify-center",
+        "el-button p-write el-button--default"
+      ]
+    }
+  },
+  {
+    "label": "q1",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "单选题我目前的就业状态\n境内全职工作\n境内升学\n自由职业\n自主创业\n出国、出境就业\n境外留学\n未就业\n下一题",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "境内全职工作"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "境内升学"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "自由职业"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "自主创业"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "出国、出境就业"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "境外留学"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "未就业"
+        }
+      ],
+      "checks": [],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "wtItemtwo",
+        "flex align-center",
+        "el-radio",
+        "el-radio__input",
+        "el-radio__inner",
+        "el-radio__original",
+        "el-radio__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-next-btn el-button--default"
+      ]
+    }
+  },
+  {
+    "label": "q2_after_abroad",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "单选题我觉得母校本专业就业机会\n较多\n一般\n较少\n上一题\n下一题\n\n麻烦您，选填齐全该题目",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "较多"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "一般"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "较少"
+        }
+      ],
+      "checks": [],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-topic-btn el-button--default",
+          "role": null,
+          "text": "上一题"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "wtItemtwo",
+        "flex align-center",
+        "el-radio",
+        "el-radio__input",
+        "el-radio__inner",
+        "el-radio__original",
+        "el-radio__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-topic-btn el-button--default",
+        "el-button p-next-btn el-button--default",
+        "el-message el-message--error",
+        "el-message__icon el-icon-error",
+        "el-message__content"
+      ]
+    }
+  },
+  {
+    "label": "auto_click_0",
+    "clicked": "较多",
+    "title": "单选题我觉得母校本专业就业机会\n较多\n一般\n较少\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n拼命为您服务中..."
+  },
+  {
+    "label": "after_0",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "单选题毕业以来，我离职的次数（不含实习）\n从未就业\n0次（就业过，但从未离职）\n1次\n2次\n3次及以上\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "从未就业"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "0次（就业过，但从未离职）"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "1次"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "2次"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "3次及以上"
+        }
+      ],
+      "checks": [],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-topic-btn el-button--default",
+          "role": null,
+          "text": "上一题"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "wtItemtwo",
+        "flex align-center",
+        "el-radio",
+        "el-radio__input",
+        "el-radio__inner",
+        "el-radio__original",
+        "el-radio__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-topic-btn el-button--default",
+        "el-button p-next-btn el-button--default",
+        "el-message el-message--error",
+        "el-message__icon el-icon-error",
+        "el-message__content"
+      ]
+    }
+  },
+  {
+    "label": "auto_click_1",
+    "clicked": "从未就业",
+    "title": "单选题毕业以来，我离职的次数（不含实习）\n从未就业\n0次（就业过，但从未离职）\n1次\n2次\n3次及以上\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n拼命为您服务中..."
+  },
+  {
+    "label": "after_1",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "多选题为适应AI时代的职业发展，我希望学校在哪些方面提供支持\n开设AI工具实操类课程\n加强AI与专业结合的跨学科培养\n提供AI相关职业规划与就业指导\n增加AI相关实习实践机会\n其他\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "开设AI工具实操类课程"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "加强AI与专业结合的跨学科培养"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "提供AI相关职业规划与就业指导"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "增加AI相关实习实践机会"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "其他"
+        }
+      ],
+      "checks": [
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "开设AI工具实操类课程"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "加强AI与专业结合的跨学科培养"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "提供AI相关职业规划与就业指导"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "增加AI相关实习实践机会"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "其他"
+        }
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-topic-btn el-button--default",
+          "role": null,
+          "text": "上一题"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "el-checkbox-group",
+        "wtItem",
+        "flex align-center",
+        "el-checkbox",
+        "el-checkbox__input",
+        "el-checkbox__inner",
+        "el-checkbox__original",
+        "el-checkbox__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-topic-btn el-button--default",
+        "el-button p-next-btn el-button--default",
+        "el-message el-message--error",
+        "el-message__icon el-icon-error",
+        "el-message__content"
+      ]
+    }
+  },
+  {
+    "label": "auto_click_2",
+    "clicked": "开设AI工具实操类课程",
+    "title": "多选题为适应AI时代的职业发展，我希望学校在哪些方面提供支持\n开设AI工具实操类课程\n加强AI与专业结合的跨学科培养\n提供AI相关职业规划与就业指导\n增加AI相关实习实践机会\n其他\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目"
+  },
+  {
+    "label": "after_2",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "单选题我升学的院校是否属于重点高校（双高/双一流或QS前100）或重点科研机构\n是\n否\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "是"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "否"
+        }
+      ],
+      "checks": [],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-topic-btn el-button--default",
+          "role": null,
+          "text": "上一题"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "wtItemtwo",
+        "flex align-center",
+        "el-radio",
+        "el-radio__input",
+        "el-radio__inner",
+        "el-radio__original",
+        "el-radio__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-topic-btn el-button--default",
+        "el-button p-next-btn el-button--default",
+        "el-message el-message--error",
+        "el-message__icon el-icon-error",
+        "el-message__content"
+      ]
+    }
+  },
+  {
+    "label": "auto_click_3",
+    "clicked": "是",
+    "title": "单选题我升学的院校是否属于重点高校（双高/双一流或QS前100）或重点科研机构\n是\n否\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n拼命为您服务中..."
+  },
+  {
+    "label": "after_3",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "多选题我选择升学的主要原因\n提升就业竞争力\n符合个人专业兴趣\n加强知识储备或增长见识\n缓解就业压力\n受亲友、老师等影响\n职业发展规划需要\n去心仪学校或专业\n去心仪的地区或城市\n其他\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "提升就业竞争力"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "符合个人专业兴趣"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "加强知识储备或增长见识"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "缓解就业压力"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "受亲友、老师等影响"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "职业发展规划需要"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "去心仪学校或专业"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "去心仪的地区或城市"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "其他"
+        }
+      ],
+      "checks": [
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "提升就业竞争力"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "符合个人专业兴趣"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "加强知识储备或增长见识"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "缓解就业压力"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "受亲友、老师等影响"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "职业发展规划需要"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "去心仪学校或专业"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "去心仪的地区或城市"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-checkbox",
+          "role": null,
+          "text": "其他"
+        }
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-checkbox__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-topic-btn el-button--default",
+          "role": null,
+          "text": "上一题"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "el-checkbox-group",
+        "wtItem",
+        "flex align-center",
+        "el-checkbox",
+        "el-checkbox__input",
+        "el-checkbox__inner",
+        "el-checkbox__original",
+        "el-checkbox__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-topic-btn el-button--default",
+        "el-button p-next-btn el-button--default",
+        "el-message el-message--error",
+        "el-message__icon el-icon-error",
+        "el-message__content"
+      ]
+    }
+  },
+  {
+    "label": "auto_click_4",
+    "clicked": "提升就业竞争力",
+    "title": "多选题我选择升学的主要原因\n提升就业竞争力\n符合个人专业兴趣\n加强知识储备或增长见识\n缓解就业压力\n受亲友、老师等影响\n职业发展规划需要\n去心仪学校或专业\n去心仪的地区或城市\n其他\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目"
+  },
+  {
+    "label": "after_4",
+    "url": "https://dm.njcedu.com/pager?userId=4&templateId=17093",
+    "text": "单选题我升学就读专业与之前专业的相关程度\n相关\n基本相关\n不太相关\n不相关\n上一题\n下一题\n\n麻烦您，选填齐全该题目\n\n麻烦您，选填齐全该题目",
+    "dom": {
+      "radios": [
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "相关"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "基本相关"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "不太相关"
+        },
+        {
+          "tag": "LABEL",
+          "cls": "el-radio",
+          "role": "radio",
+          "text": "不相关"
+        }
+      ],
+      "checks": [],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        },
+        {
+          "tag": "INPUT",
+          "cls": "el-radio__original",
+          "role": null,
+          "text": ""
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-topic-btn el-button--default",
+          "role": null,
+          "text": "上一题"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "el-button p-next-btn el-button--default",
+          "role": null,
+          "text": "下一题"
+        }
+      ],
+      "tables": [],
+      "allClasses": [
+        "pager",
+        "p-page-left",
+        "p-page-center",
+        "p-topic flex flex flex-column rel",
+        "el-progress el-progress--line el-progress--without-text p-progreones",
+        "el-progress-bar",
+        "el-progress-bar__outer",
+        "el-progress-bar__inner",
+        "card-box",
+        "p-title text-left",
+        "p-wtType",
+        "p-topic-context",
+        "custom-scrollbar el-scrollbar",
+        "el-scrollbar__wrap el-scrollbar__wrap--hidden-default",
+        "el-scrollbar__view",
+        "wtItemtwo",
+        "flex align-center",
+        "el-radio",
+        "el-radio__input",
+        "el-radio__inner",
+        "el-radio__original",
+        "el-radio__label",
+        "el-scrollbar__bar is-horizontal",
+        "el-scrollbar__thumb",
+        "el-scrollbar__bar is-vertical",
+        "p-button-group",
+        "el-button p-topic-btn el-button--default",
+        "el-button p-next-btn el-button--default",
+        "el-message el-message--error",
+        "el-message__icon el-icon-error",
+        "el-message__content"
+      ]
+    }
+  }
+]
