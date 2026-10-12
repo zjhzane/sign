@@ -1,0 +1,31 @@
+name: Alien Login Daily
+
+on:
+  schedule:
+    - cron: "10 17 * * *"   # 每天 17:10 UTC = 北京时间 01:10
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: Run script
+        env:
+          ALIEN_PHONE: ${{ secrets.ALIEN_PHONE }}
+          ALIEN_PASSWORD: ${{ secrets.ALIEN_PASSWORD }}
+          HEADLESS: "true"
+        run: python alien_login.py
