@@ -1,5 +1,3 @@
-
-    
 import os
 import re
 import sys
@@ -75,22 +73,36 @@ def login(page, phone: str, password: str) -> None:
 def ensure_active(page) -> None:
     """登录后检查 header 活跃度按钮,未活跃则点击激活,仍未活跃则直接报错退出。"""
     inactive = page.get_by_text("今日未活跃", exact=False)
-    if inactive.count() > 0:
-        print("账号今日未活跃,尝试点击活跃度按钮激活...")
-        inactive.first.click()
-        page.wait_for_timeout(1000)
-        # 弹窗出现时点"开始"确认
-        start_btn = page.get_by_role("button", name="开始", exact=True)
-        if start_btn.count() > 0:
-            start_btn.first.click()
-            page.wait_for_timeout(1000)
-        # 重新检查
-        active = page.get_by_text("今日已活跃", exact=False)
-        active.first.wait_for(state="visible", timeout=10000)
-        print("已激活,今日已活跃。")
-    else:
-        page.get_by_text("今日已活跃", exact=False).first.wait_for(state="visible", timeout=10000)
+    if inactive.count() == 0:
+        page.get_by_text("今日已活跃", exact=False).first.wait_for(state="visible", timeout=15000)
         print("账号今日已活跃。")
+        return
+
+    print("账号今日未活跃,尝试点击活跃度按钮激活...")
+    inactive.first.click(timeout=5000)
+    # 旧逻辑的毛病：点完只固定睡 1 秒，然后用 count() 瞬间判断「开始」按钮
+    # 在不在。count() 不等待，弹窗动画稍慢（超过 1 秒）就会漏点「开始」，
+    # 之后等「今日已活跃」永远等不到，直接超时退出——#5、#6 两次失败
+    # 都是这个竞态。这里改成带超时的等待，弹窗出现就点。
+    start_btn = page.get_by_role("button", name="开始", exact=True)
+    try:
+        start_btn.first.wait_for(state="visible", timeout=15000)
+        start_btn.first.click()
+        print("已点击弹窗「开始」按钮，等待激活生效...")
+    except PlaywrightTimeout:
+        print("未出现「开始」确认弹窗，继续检查状态...")
+    # 激活生效可能需要一点时间，先直接等；若仍未出现，刷新页面后重新检查
+    # （部分页面激活状态需刷新才显示）。
+    try:
+        page.get_by_text("今日已活跃", exact=False).first.wait_for(state="visible", timeout=15000)
+        print("已激活,今日已活跃。")
+        return
+    except PlaywrightTimeout:
+        print("直接等待未生效，刷新页面后重新检查...")
+    page.reload(wait_until="domcontentloaded", timeout=60000)
+    page.wait_for_timeout(2000)
+    page.get_by_text("今日已活跃", exact=False).first.wait_for(state="visible", timeout=15000)
+    print("已激活,今日已活跃。")
 
 
 def click_game_card(page, game_titles: list[str]):
