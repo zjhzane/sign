@@ -4,26 +4,28 @@ import time
 import random
 from playwright.sync_api import sync_playwright
 from openpyxl import load_workbook
+from datetime import datetime, date, timedelta
 
 # ----------------------------------------------------
 # --- 【配置信息】 ---
 # ----------------------------------------------------
 LOGIN_URL = "https://nxg.zwu.edu.cn/api/cas/testRedirect?code=kuucNsp2rj0608fMluOtv0kwArMbaSUa4qToaiKGWt%252B%252FxBwMiP0vWpvNd6A5acLiJyuimV5QoA2KY2r79DeanVAG1AM%252FZRnWF7Um4RW30h46SWkt8kV9HUEHAcz8vPxlz77kREfBEDWPBoFUzOXLtgeolobVFX8MB12SdcvOx1Q%253D&type=pc"
-ICON_SELECTOR = "#app > div.thePage > div:nth-child(7) > div.row.flex_up.flex_w > div:nth-child(5) > div.svgicon_bg.flex_center > svg > use"
+
+ICON_SELECTOR = "#app > div.pc-page > div.pc-body > section > div:nth-child(3) > div.pc-menu-grid > div:nth-child(5) > div.pc-menu-icon.flex_center"
 
 FILL_SUMMARY_SELECTOR = 'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[5]/div[2]/div[1]/textarea'
 FINAL_RADIO_SELECTOR = 'xpath=//*[@id="app"]/div/div[2]/div[2]/form/div[2]/div[3]/div[2]/div/div/div/div[1]/span'
 
 SUBMIT_BUTTON_SELECTOR = 'button.van-button--primary:has-text("提交")'
 
-TIME_PICKER_YEAR = "2025年"
+TIME_PICKER_YEAR = f"{datetime.now().year}年"
 TIME_PICKER_CONFIRM = "button.van-picker__confirm"
 
 LOCATION_MAPPING = {
     '办公室': 'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[2]/div[2]/div/div/div/div[3]/span',
     '寝室':   'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[2]/div[2]/div/div/div/div[2]/span',
     '教室':   'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[2]/div[2]/div/div/div/div[1]/span',
-    '线上/电话': 'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[2]/div[2]/div/div/div/div[4]/span',
+    '线上电话': 'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[2]/div[2]/div/div/div/div[4]/span',
     '其他':   'xpath=/html/body/div[1]/div/div[2]/div[2]/form/div[2]/div[2]/div[2]/div/div/div/div[5]/span',
 }
 
@@ -63,8 +65,7 @@ def read_student_data_from_excel(filepath):
             if sid:
                 themes = [
                     t.strip()
-                    for t in str(theme or '').replace('，', ',').replace('；', ';').split(',')
-                    if t.strip()
+                    for t in str(theme or '').replace('，', ',').replace('；', ';').split(',') if t.strip()
                 ]
                 data.append((
                     str(sid).strip(),
@@ -77,6 +78,29 @@ def read_student_data_from_excel(filepath):
     except Exception as e:
         print(f"读取Excel出错: {e}")
         return []
+
+
+def pick_picker_column(page, column_index, label):
+    """
+    在 van-picker 的第 column_index 列（0=年, 1=月, 2=日）中按文本精确点选。
+    用 JS 直接对元素派发 click：Playwright 的坐标点击容易被 picker 的
+    遮罩层挡住而静默失效，看起来就像“点了没反应”。
+    找到并点击返回 True，没找到返回 False。
+    """
+    return page.evaluate("""
+        (args) => {
+            const cols = document.querySelectorAll('.van-picker-column');
+            if (cols.length <= args.col) return false;
+            const items = cols[args.col].querySelectorAll('.van-picker-column__item');
+            for (const item of items) {
+                if (item.textContent.trim() === args.label) {
+                    item.click();
+                    return true;
+                }
+            }
+            return false;
+        }
+    """, {"col": column_index, "label": label})
 
 
 def click_submit(page):
@@ -200,15 +224,20 @@ def automate_workflow():
                 except Exception:
                     pass
 
-                # 随机选月份和日期
+                # 随机选日期：当月1号到今天之间，只选工作日（周一至周五）
                 try:
-                    month_labels = ["09月", "10月", "11月", "12月"]
-                    picked_month = random.choice(month_labels)
-                    page.locator("div.van-ellipsis").filter(has_text=picked_month).first.click(timeout=5000)
-                    time.sleep(0.1)
-                    day_num = random.randint(1, 30)
-                    day_label = f"{day_num:02d}日"
-                    page.locator("div.van-ellipsis").filter(has_text=day_label).first.click(timeout=5000)
+                    today = date.today()
+                    valid_days = [
+                        d for d in range(1, today.day + 1)
+                        if date(today.year, today.month, d).weekday() < 5
+                    ]
+                    picked_day = random.choice(valid_days)
+                    pick_picker_column(page, 1, f"{today.month}月")
+                    time.sleep(0.3)
+                    pick_picker_column(page, 2, f"{picked_day:02d}日")
+                    time.sleep(0.3)
+                    selected_day = page.locator(".van-picker-column").nth(2).locator(".van-picker-column__item--selected").inner_text().strip()
+                    print(f"-> 已选择谈话日期：{today.year}-{today.month:02d}-{picked_day:02d}（日期列当前选中：{selected_day}）")
                 except Exception:
                     pass
 
@@ -246,3 +275,10 @@ def automate_workflow():
 
 if __name__ == "__main__":
     automate_workflow()
+
+
+
+
+
+
+
